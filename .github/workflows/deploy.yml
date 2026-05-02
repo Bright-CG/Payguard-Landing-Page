@@ -1,0 +1,39 @@
+name: Deploy Landing Page
+
+on:
+  push:
+    branches:
+      - main # Change to 'master' if your landing page repo uses that
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_SERVER_IP }}
+          username: ${{ secrets.DEV_SERVER_USER }}
+          key: ${{ secrets.DEV_SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            # 1. Ensure the directory exists
+            sudo mkdir -p /var/www/payguard-landing
+            sudo chown -R $USER:$USER /var/www/payguard-landing
+            
+            # 2. Go to a temp folder and clone the landing page repo
+            cd /tmp
+            rm -rf temp_landing
+            git clone --depth 1 https://github.com/Bright-CG/Payguard-Landing-Page.git temp_landing
+            
+            # 3. Copy the files to the live folder
+            cp -R temp_landing/* /var/www/payguard-landing/
+            
+            # 4. Cleanup
+            rm -rf temp_landing
+            
+            echo "Landing Page updated successfully!"
