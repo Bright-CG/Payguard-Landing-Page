@@ -3,7 +3,7 @@ name: Deploy Landing Page
 on:
   push:
     branches:
-      - main # Change to 'master' if your landing page repo uses that
+      - v2-new-design
 
 jobs:
   deploy:
