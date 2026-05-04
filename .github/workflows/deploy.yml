@@ -28,7 +28,7 @@ jobs:
             # 2. Go to a temp folder and clone the landing page repo
             cd /tmp
             rm -rf temp_landing
-            git clone --depth 1 https://github.com/Bright-CG/Payguard-Landing-Page.git temp_landing
+            git clone --depth 1 --branch v2-new-design https://github.com/Bright-CG/Payguard-Landing-Page.git temp_landing
             
             # 3. Copy the files to the live folder
             cp -R temp_landing/* /var/www/payguard-landing/
