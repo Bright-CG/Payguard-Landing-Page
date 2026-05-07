@@ -22,8 +22,7 @@ jobs:
           port: 22
           script: |
             # 1. Ensure the directory exists
-            sudo mkdir -p /var/www/payguard-landing
-            sudo chown -R $USER:$USER /var/www/payguard-landing
+            mkdir -p /home/payguard/landing
             
             # 2. Go to a temp folder and clone the landing page repo
             cd /tmp
@@ -31,9 +30,14 @@ jobs:
             git clone --depth 1 --branch v2-new-design https://github.com/Bright-CG/Payguard-Landing-Page.git temp_landing
             
             # 3. Copy the files to the live folder
-            cp -R temp_landing/* /var/www/payguard-landing/
+            cp -R temp_landing/* /home/payguard/landing/
             
             # 4. Cleanup
             rm -rf temp_landing
+            
+            # 5. Strict permissions reset
+            echo "Applying strict immutable permissions to landing page..."
+            find /home/payguard/landing -type d -exec chmod 750 {} \;
+            find /home/payguard/landing -type f -exec chmod 640 {} \;
             
             echo "Landing Page updated successfully!"
